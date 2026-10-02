@@ -1,6 +1,7 @@
 {
   "pages": [
-    "pages/editor/editor"
+    "pages/editor/editor",
+    "pages/result/result"
   ],
   "window": {
     "navigationBarTitleText": "头像水印",

@@ -16,7 +16,12 @@ const OUT_SIZE = 1080; // 导出边长（微信头像显示为正方形，1080 �
  * @param {string} [opts.badgeUrl] 小程序码角标
  * @param {number} [opts.size] 导出边长，默认 1080
  */
-async function exportAndSave(opts) {
+/**
+ * 只导出，不保存
+ * 结果页要先给用户看成品再决定存不存，避免「保存了才发现不喜欢」污染相册
+ * @returns {Promise<{tempFilePath:string, cost:number}>}
+ */
+async function exportImage(opts) {
   const size = opts.size || OUT_SIZE;
   const t0 = Date.now();
 
@@ -32,9 +37,14 @@ async function exportAndSave(opts) {
   });
 
   const tempFilePath = await canvasToTemp(off, size);
-  const saved = await saveToAlbum(tempFilePath);
+  return { tempFilePath, cost: Date.now() - t0 };
+}
 
-  return { saved, tempFilePath, cost: Date.now() - t0 };
+/** 导出并直接保存（一键流程，结果页不再需要时用） */
+async function exportAndSave(opts) {
+  const r = await exportImage(opts);
+  const saved = await saveToAlbum(r.tempFilePath);
+  return { saved, tempFilePath: r.tempFilePath, cost: r.cost };
 }
 
 function canvasToTemp(canvas, size) {
@@ -86,4 +96,4 @@ async function saveToAlbum(filePath) {
   }
 }
 
-module.exports = { exportAndSave, canvasToTemp, saveToAlbum, OUT_SIZE };
+module.exports = { exportImage, exportAndSave, canvasToTemp, saveToAlbum, OUT_SIZE };

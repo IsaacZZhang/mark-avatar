@@ -5,8 +5,11 @@ const db = cloud.database();
 const _ = db.command;
 
 // 事件 → 统计字段映射
+// 转化漏斗：use(选了水印) → export(出图) → save(存相册) → share(分享拉新)
+// export 单独拆出来是为了定位「编辑完但没存」的流失点
 const FIELD_MAP = {
   apply_template: 'use',
+  export_image: 'export',
   save_image: 'save',
   share: 'share'
 };
@@ -55,7 +58,7 @@ async function bumpStat(templateId, date, field) {
     return col.doc(exist.data[0]._id).update({ data: { [field]: _.inc(1) } });
   }
   return col.add({
-    data: { templateId, date, use: 0, save: 0, share: 0, [field]: 1 }
+    data: { templateId, date, use: 0, export: 0, save: 0, share: 0, [field]: 1 }
   });
 }
 

@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="card">
+    <image class="preview" src="{{path}}" mode="aspectFit" bindtap="onPreview" />
+    <view class="tip">点图片可以放大看细节</view>
+  </view>
+
+  <view class="guide">
+    <view class="guide-title">怎么换成微信头像</view>
+    <view class="step" wx:for="{{steps}}" wx:key="*this">
+      <text class="idx">{{index + 1}}</text>
+      <text class="txt">{{item}}</text>
+    </view>
+    <view class="note">微信不开放自动换头像的接口，这步只能手动，3 秒的事</view>
+  </view>
+
+  <view class="actions">
+    <button class="btn primary" bindtap="onSave">
+      {{saved ? '已存到相册' : '保存到相册'}}
+    </button>
+    <view class="sub">
+      <button class="btn ghost" bindtap="onBackEdit">继续调整</button>
+      <button class="btn ghost" open-type="share">分享给朋友</button>
+    </view>
+    <view class="restart" bindtap="onRestart">换张图重做</view>
+  </view>
+</view>

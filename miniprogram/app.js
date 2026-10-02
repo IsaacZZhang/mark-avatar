@@ -24,6 +24,9 @@ App({
     windowWidth: 375,
     cloudReady: false,
     badgeUrl: '', // 小程序码角标，云函数就绪后写入
-    showBadge: true
+    showBadge: true,
+    // 编辑器导出后写这里，结果页读。用 globalData 而不是 URL 传参：
+    // 临时文件路径很长且含特殊字符，拼进 URL 容易出解析问题
+    lastResult: null // { path, templateId, cost }
   }
 });

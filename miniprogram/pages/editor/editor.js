@@ -2,7 +2,7 @@ const app = getApp();
 
 const { createStickerLayer } = require('../../engine/layer.js');
 const { render } = require('../../engine/renderer.js');
-const { exportAndSave } = require('../../engine/exporter.js');
+const { exportImage } = require('../../engine/exporter.js');
 const { load } = require('../../engine/image-loader.js');
 const { pickLayer, pinch, clampScale } = require('../../engine/geometry.js');
 
@@ -275,20 +275,27 @@ Page({
     wx.showLoading({ title: '生成中', mask: true });
     try {
       const badgeUrl = app.globalData.showBadge ? app.globalData.badgeUrl : '';
-      const r = await exportAndSave({
+      // 先只导出，不落相册：让用户看到成品再决定存不存
+      const r = await exportImage({
         base: this.baseImg,
         layers: this.layers,
         badgeUrl: badgeUrl,
         size: 1080
       });
-      if (r.saved) {
-        wx.showToast({ title: '已保存到相册', icon: 'success' });
-        stats.track('save_image', {
-          templateId: this.current ? this.current.templateId : '',
-          cost: r.cost,
-          layerCount: this.layers.length
-        });
-      }
+
+      app.globalData.lastResult = {
+        path: r.tempFilePath,
+        templateId: this.current ? this.current.templateId : '',
+        cost: r.cost
+      };
+
+      stats.track('export_image', {
+        templateId: this.current ? this.current.templateId : '',
+        cost: r.cost,
+        layerCount: this.layers.length
+      });
+
+      wx.navigateTo({ url: '/pages/result/result' });
     } catch (err) {
       console.error('[editor] 导出失败', err);
       wx.showToast({ title: '生成失败，请重试', icon: 'none' });
@@ -312,6 +319,8 @@ Page({
   },
 
   onShareAppMessage() {
+    const tid = this.layers.length ? this.layers[0].templateId : '';
+    if (tid) stats.track('share', { templateId: tid, from: 'editor' });
     return {
       title: '给头像加个水印，30 秒搞定',
       path: '/pages/editor/editor'
