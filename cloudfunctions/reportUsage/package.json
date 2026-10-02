@@ -1,0 +1,9 @@
+{
+  "name": "reportUsage",
+  "version": "1.0.0",
+  "description": "埋点上报：写原始流水 + 更新聚合统计",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

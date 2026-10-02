@@ -3,13 +3,13 @@ const app = getApp();
 const { createStickerLayer } = require('../../engine/layer.js');
 const { render } = require('../../engine/renderer.js');
 const { exportAndSave } = require('../../engine/exporter.js');
-const { load, loadRemote } = require('../../engine/image-loader.js');
+const { load } = require('../../engine/image-loader.js');
 const { pickLayer, pinch, clampScale } = require('../../engine/geometry.js');
-const BUILTIN = require('../../config/templates.js');
 
-// TODO: 素材热更地址。开通云开发后，把 manifest.json 传到云存储，
-//       在这里填它的下载域名地址（记得在 mp 后台加入 downloadFile 合法域名）
-const MANIFEST_URL = '';
+const templateSvc = require('../../services/template.js');
+const assetSvc = require('../../services/asset.js');
+const stats = require('../../services/stats.js');
+const cloud = require('../../services/cloud.js');
 
 Page({
   data: {
@@ -37,6 +37,23 @@ Page({
   onReady() {
     this.initStage();
     this.initManifest();
+    this.loadBadge();
+  },
+
+  /**
+   * 拉取分享角标小程序码
+   * cloud:// 的 fileID 不能直接给 canvas，必须下载成本地临时文件
+   */
+  async loadBadge() {
+    if (!cloud.isReady()) return; // 未开云开发就不画角标
+    const res = await cloud.call('getWxacode', { scene: 'avatar' }, { fallback: null });
+    if (!res || !res.fileID) return;
+    try {
+      const d = await wx.cloud.downloadFile({ fileID: res.fileID });
+      app.globalData.badgeUrl = d.tempFilePath;
+    } catch (e) {
+      // 角标拿不到就当没有，不影响出图
+    }
   },
 
   // ---------- 画布初始化 ----------
@@ -68,50 +85,30 @@ Page({
   },
 
   // ---------- 素材清单 ----------
+  // 三级缓存：内置包 → 本地 storage → 云端 CDN
   initManifest() {
-    this.applyManifest(BUILTIN); // 先用内置包渲染，首屏不等网络
-    if (MANIFEST_URL) this.fetchRemoteManifest();
-  },
+    // load() 立刻返回可用清单（缓存优先，其次内置），并静默发起热更
+    this.manifest = templateSvc.load((updated) => {
+      // 静默更新：只刷选择器，不动用户已加的图层
+      this.manifest = updated;
+      this.setData({
+        categories: templateSvc.categories(updated),
+        templates: templateSvc.filterByCat(updated, this.data.activeCat)
+      });
+    });
 
-  applyManifest(m) {
-    this.manifest = m;
-    const cats = (m.categories || []).slice().sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    const cats = templateSvc.categories(this.manifest);
     const activeCat = cats.length ? cats[0].id : '';
     this.setData({
       categories: cats,
       activeCat: activeCat,
-      templates: this.filterByCat(activeCat)
+      templates: templateSvc.filterByCat(this.manifest, activeCat)
     });
-  },
-
-  filterByCat(catId) {
-    return (this.manifest.templates || []).filter((t) => !catId || t.category === catId);
-  },
-
-  async fetchRemoteManifest() {
-    try {
-      const remote = await new Promise((resolve, reject) => {
-        wx.request({
-          url: MANIFEST_URL,
-          timeout: 3000,
-          success: (r) => (r.statusCode === 200 ? resolve(r.data) : reject(r)),
-          fail: reject
-        });
-      });
-      // 只在版本更新时替换，避免无谓刷新
-      if (remote && remote.manifestVersion > (this.manifest.manifestVersion || 0)) {
-        wx.setStorageSync('wm_manifest', remote);
-        this.applyManifest(remote);
-      }
-    } catch (e) {
-      // 网络失败就继续用内置/缓存清单，工具型小程序不能因为网络差打不开
-      console.warn('[editor] 远程清单拉取失败，使用本地清单');
-    }
   },
 
   onSwitchCat(e) {
     const id = e.currentTarget.dataset.id;
-    this.setData({ activeCat: id, templates: this.filterByCat(id) });
+    this.setData({ activeCat: id, templates: templateSvc.filterByCat(this.manifest, id) });
   },
 
   // ---------- 选图 ----------
@@ -162,6 +159,7 @@ Page({
       this.baseImg = await load(this.canvas, src);
       this.setData({ hasBase: true });
       await this.draw();
+      stats.track('pick_image', { w: this.baseImg.width, h: this.baseImg.height });
     } catch (err) {
       wx.showToast({ title: '图片加载失败', icon: 'none' });
     } finally {
@@ -175,10 +173,11 @@ Page({
     const tpl = (this.manifest.templates || []).find((t) => t.id === id);
     if (!tpl) return;
 
-    // 预加载，保证点击即出效果
     let img = null;
     try {
-      img = await loadRemote(this.canvas, tpl.asset);
+      // 先过缓存：命中落盘文件则零网络，未命中才下载
+      const path = await assetSvc.resolve(tpl.asset);
+      img = await load(this.canvas, path);
     } catch (err) {
       wx.showToast({ title: '素材加载失败', icon: 'none' });
       return;
@@ -191,6 +190,7 @@ Page({
 
     this.setData({ hasSelection: true });
     await this.draw();
+    stats.track('apply_template', { templateId: tpl.id });
   },
 
   // ---------- 手势 ----------
@@ -283,7 +283,11 @@ Page({
       });
       if (r.saved) {
         wx.showToast({ title: '已保存到相册', icon: 'success' });
-        // TODO: 接入云函数后上报埋点 reportUsage({ templateId, cost })
+        stats.track('save_image', {
+          templateId: this.current ? this.current.templateId : '',
+          cost: r.cost,
+          layerCount: this.layers.length
+        });
       }
     } catch (err) {
       console.error('[editor] 导出失败', err);

@@ -1,0 +1,9 @@
+{
+  "name": "getWxacode",
+  "version": "1.0.0",
+  "description": "生成带 scene 的小程序码（云调用免鉴权）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

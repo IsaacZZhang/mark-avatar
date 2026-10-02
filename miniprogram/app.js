@@ -2,6 +2,8 @@
 // 留空时小程序以纯离线模式运行，内置素材照常可用，只是没有热更和统计。
 const CLOUD_ENV = '';
 
+const stats = require('./services/stats.js');
+
 App({
   onLaunch() {
     if (CLOUD_ENV && wx.cloud) {
@@ -11,7 +13,10 @@ App({
     const sys = wx.getSystemInfoSync();
     this.globalData.dpr = Math.min(sys.pixelRatio || 2, 2); // 顶到 2 就够，3x 屏再乘收益极小但内存翻倍
     this.globalData.windowWidth = sys.windowWidth;
-    this.globalData.cloudReady = !!CLOUD_ENV;
+    this.globalData.cloudReady = !!CLOUD_ENV && !!wx.cloud;
+
+    // 补报上次没发出去的埋点（延迟 2s，避开启动资源竞争）
+    stats.flushOnLaunch();
   },
 
   globalData: {
