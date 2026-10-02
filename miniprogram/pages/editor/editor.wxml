@@ -1,0 +1,61 @@
+<view class="page">
+
+  <!-- 画布舞台 -->
+  <view class="stage-wrap">
+    <canvas
+      id="stage"
+      type="2d"
+      class="stage"
+      style="width:{{stageSize}}px;height:{{stageSize}}px"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    ></canvas>
+
+    <!-- 空态引导 -->
+    <view wx:if="{{!hasBase}}" class="stage-empty">
+      <view class="empty-title">先选一张图</view>
+      <!-- 头像填写能力：wx.getUserProfile 已回收，这是目前唯一正确姿势 -->
+      <button class="pick-btn primary" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        用我的微信头像
+      </button>
+      <button class="pick-btn" bindtap="onChooseAlbum">从相册选一张</button>
+    </view>
+  </view>
+
+  <!-- 素材选择器 -->
+  <view class="picker">
+    <scroll-view class="cats" scroll-x enable-flex>
+      <view
+        wx:for="{{categories}}"
+        wx:key="id"
+        class="cat {{activeCat === item.id ? 'cat-on' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onSwitchCat"
+      >{{item.name}}</view>
+    </scroll-view>
+
+    <scroll-view class="stickers" scroll-x enable-flex>
+      <view
+        wx:for="{{templates}}"
+        wx:key="id"
+        class="sticker"
+        data-id="{{item.id}}"
+        bindtap="onPickTemplate"
+      >
+        <image class="sticker-img" src="{{item.asset}}" mode="aspectFit" />
+        <view class="sticker-name">{{item.name}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 底部工具条 -->
+  <view class="toolbar">
+    <button class="tool-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">换头像</button>
+    <button class="tool-btn" bindtap="onChooseAlbum">换图片</button>
+    <button class="tool-btn" wx:if="{{hasSelection}}" bindtap="onDeleteCurrent">删除</button>
+    <button class="tool-btn" wx:else bindtap="onClearAll">清空</button>
+    <button class="tool-btn save" bindtap="onSave" loading="{{saving}}">保存头像</button>
+  </view>
+
+</view>

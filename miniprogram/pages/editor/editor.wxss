@@ -1,0 +1,139 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ---------- 舞台 ---------- */
+.stage-wrap {
+  position: relative;
+  margin: 24rpx auto;
+  width: 686rpx;
+  height: 686rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+.stage {
+  display: block;
+}
+
+.stage-empty {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.empty-title {
+  font-size: 30rpx;
+  color: #888;
+  margin-bottom: 32rpx;
+}
+
+.pick-btn {
+  width: 420rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  margin: 12rpx 0;
+  font-size: 30rpx;
+  color: #333;
+  background: #f2f2f7;
+  border-radius: 44rpx;
+}
+
+.pick-btn.primary {
+  color: #fff;
+  background: #07c160;
+}
+
+/* ---------- 素材选择器 ---------- */
+.picker {
+  flex: 1;
+  background: #fff;
+  border-radius: 20rpx 20rpx 0 0;
+  padding: 16rpx 0 8rpx;
+}
+
+.cats {
+  white-space: nowrap;
+  padding: 0 24rpx 12rpx;
+}
+
+.cat {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  margin-right: 16rpx;
+  font-size: 26rpx;
+  color: #666;
+  background: #f2f2f7;
+  border-radius: 28rpx;
+}
+
+.cat-on {
+  color: #fff;
+  background: #07c160;
+}
+
+.stickers {
+  white-space: nowrap;
+  padding: 8rpx 24rpx 16rpx;
+}
+
+.sticker {
+  display: inline-block;
+  width: 176rpx;
+  margin-right: 16rpx;
+  text-align: center;
+}
+
+.sticker-img {
+  width: 176rpx;
+  height: 108rpx;
+  background: #fafafa;
+  border-radius: 12rpx;
+}
+
+.sticker-name {
+  font-size: 22rpx;
+  color: #666;
+  margin-top: 8rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ---------- 工具条 ---------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 24rpx 24rpx;
+  background: #fff;
+}
+
+.tool-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 28rpx;
+  color: #333;
+  background: #f2f2f7;
+  border-radius: 16rpx;
+  padding: 0;
+}
+
+.tool-btn.save {
+  flex: 1.6;
+  color: #fff;
+  background: #07c160;
+}

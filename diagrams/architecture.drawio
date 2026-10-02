@@ -1,0 +1,171 @@
+<mxfile host="app.diagrams.net" modified="2026-10-01T20:30:00.000Z" agent="WeChatMiniProgramArchitect" version="21.0.0" type="device">
+  <diagram id="avatar-watermark-arch" name="头像水印小程序架构总览">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="头像水印小程序 · 分层架构总览" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="15" width="1090" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="设计原则：端侧完成全部图像处理，云只做素材分发与数据统计" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="45" width="1090" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L1" value="① 微信宿主开放能力" style="swimlane;html=1;startSize=26;fillColor=#E1E1F0;strokeColor=#4D6C9E;fontSize=13;fontStyle=1;swimlaneFillColor=#E1E1F0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="75" width="1090" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="L1a" value="头像填写能力&#10;chooseAvatar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="115" width="195" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L1b" value="相册/拍照&#10;wx.chooseMedia" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="275" y="115" width="195" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L1c" value="Canvas 2D&#10;type=2d" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="115" width="175" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L1d" value="保存相册&#10;saveImageToPhotosAlbum" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="685" y="115" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L1e" value="分享&#10;onShareAppMessage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="905" y="115" width="205" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L2" value="② 视图层（页面 + 组件）" style="swimlane;html=1;startSize=26;fillColor=#E1E1F0;strokeColor=#4D6C9E;fontSize=13;fontStyle=1;swimlaneFillColor=#E1E1F0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="185" width="1090" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="L2a" value="editor&#10;★ 主编辑器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="225" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2b" value="gallery&#10;素材中心 (P1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="265" y="225" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2c" value="result&#10;结果页 (P1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="470" y="225" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2d" value="canvas-stage&#10;画布舞台+手势" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="675" y="225" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2e" value="sticker-picker&#10;素材选择器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="880" y="225" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L3" value="③ 渲染引擎（核心 · 与业务解耦）" style="swimlane;html=1;startSize=26;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=13;fontStyle=1;swimlaneFillColor=#FFF2CC;" vertex="1" parent="1">
+          <mxGeometry x="40" y="315" width="1090" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="L3a" value="renderer.js&#10;分层合成核心" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="355" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3b" value="layer.js&#10;图层模型(归一化)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="260" y="355" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3c" value="image-loader.js&#10;createImage+缓存" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="460" y="355" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3d" value="geometry.js&#10;命中/变换矩阵" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="355" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3e" value="exporter.js&#10;导出+保存相册" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="870" y="355" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L3f1" value="底图压缩&#10;≤1080px" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="440" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L3f2" value="cover 裁剪&#10;居中" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="240" y="440" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L3f3" value="图层栈绘制&#10;变换+透明度" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="440" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L3f4" value="小程序码角标&#10;(可关闭)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="610" y="440" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L3f5" value="canvasToTempFilePath&#10;jpg q=0.92 1080px" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="440" width="310" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L4" value="④ 服务层（统一超时 + 降级，后端失败不阻塞出图）" style="swimlane;html=1;startSize=26;fillColor=#E1E1F0;strokeColor=#4D6C9E;fontSize=13;fontStyle=1;swimlaneFillColor=#E1E1F0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="535" width="1090" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="L4a" value="template.js&#10;清单+版本比对" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="575" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L4b" value="asset.js&#10;素材落盘LRU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="575" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L4c" value="stats.js&#10;埋点上报" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="480" y="575" width="180" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L4d" value="cloud.js&#10;云调用封装" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="575" width="180" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="L4e" value="session.js&#10;编辑会话+撤销栈" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="880" y="575" width="230" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L5" value="⑤ 微信云开发（免备案 · 免鉴权云调用）" style="swimlane;html=1;startSize=26;fillColor=#D5E8D4;strokeColor=#4D8A5E;fontSize=13;fontStyle=1;swimlaneFillColor=#D5E8D4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="1090" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="L5a" value="云存储 + CDN&#10;素材图/封面/码" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="700" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L5b" value="manifest.json&#10;素材清单(热更)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="700" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L5c" value="云数据库&#10;wm_stat / user / ugc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="480" y="700" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L5d" value="云函数 ×5&#10;埋点/审核/码/解锁/榜" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="700" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L5e" value="内容安全云调用&#10;msgSec/imgSec" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="700" width="190" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="L6" value="⑥ 运营侧（改 JSON 即上新，不发版）" style="swimlane;html=1;startSize=26;fillColor=#F8CECC;strokeColor=#B85450;fontSize=13;fontStyle=1;swimlaneFillColor=#F8CECC;" vertex="1" parent="1">
+          <mxGeometry x="40" y="810" width="1090" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="L6a" value="素材上新&#10;48h 追热点" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="850" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L6b" value="热榜运营&#10;决定首屏放什么" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="850" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L6c" value="数据看板&#10;保存率/裂变系数" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="850" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L6d" value="版权合规自查&#10;(上线 checklist)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="900" y="850" width="210" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#4D6C9E;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="L1c" target="L2a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D6B656;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="L2a" target="L3a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#82B366;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="L3e" target="L4c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#82B366;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="L4a" target="L5b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="CDN 下发素材图" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#82B366;strokeWidth=2;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;labelBackgroundColor=#ffffff;fontSize=10;" edge="1" parent="1" source="L4a" target="L5a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="上传 manifest + 素材" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#B85450;strokeWidth=2;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;labelBackgroundColor=#ffffff;fontSize=10;" edge="1" parent="1" source="L6a" target="L5a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="读取统计数据" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#B85450;strokeWidth=2;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;labelBackgroundColor=#ffffff;fontSize=10;" edge="1" parent="1" source="L6c" target="L5c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note1" value="★ 核心原则&#10;① 出图全在端上完成，云挂了也能用&#10;② 素材走 CDN 热更，运营不发版上新&#10;③ 手势期间不 setData，60fps&#10;④ 任何后端调用都带 timeout + fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;dashed=1;align=left;verticalAlign=top;fontSize=11;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="925" width="1090" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

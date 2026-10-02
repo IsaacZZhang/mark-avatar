@@ -1,0 +1,18 @@
+node_modules/
+cloudfunctions/*/node_modules/
+
+# —— 公开仓库安全红线，以下任何一项入库都会出事 ——
+# 上传密钥：泄露等于别人能替你发版
+ci/private.key
+*.key
+# AppSecret / 云开发密钥 / 任何凭据
+*secret*
+*.pem
+.env
+.env.*
+# 含个人 AppID 的本地配置（AppID 填这里就不会进版本库）
+project.private.config.json
+
+# 云开发本地调试产物
+.cloudbase/
+.DS_Store

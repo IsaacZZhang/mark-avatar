@@ -1,0 +1,23 @@
+{
+  "description": "头像水印小程序",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "appid": "",
+  "projectname": "avatar-watermark",
+  "compileType": "miniprogram",
+  "libVersion": "3.0.0",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "packNpmManually": false,
+    "coverView": true,
+    "showShadowRootInWxmlPanel": true,
+    "ignoreDevUnusedFiles": true,
+    "checkInvalidKey": true,
+    "useCompilerPlugins": false
+  },
+  "condition": {}
+}
